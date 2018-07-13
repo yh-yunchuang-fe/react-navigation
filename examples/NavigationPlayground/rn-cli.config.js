@@ -11,9 +11,7 @@ module.exports = {
     return blacklist([
       /react\-navigation\/examples\/(?!NavigationPlayground).*/,
       /react\-navigation\/node_modules\/react-native\/(.*)/,
-      /react\-navigation\/node_modules\/react\/(.*)/,
-      /react\-navigation\/node_modules\/react-native-paper\/(.*)/,
-      /react\-navigation\/node_modules\/@expo\/vector-icons\/(.*)/,
+      /react\-navigation\/node_modules\/react\/(.*)/
     ]);
   },
   extraNodeModules: getNodeModulesForDirectory(path.resolve('.')),

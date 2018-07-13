@@ -4,6 +4,7 @@
 
 import React from 'react';
 import {
+  Button,
   Platform,
   ScrollView,
   StyleSheet,
@@ -17,9 +18,9 @@ import {
   createNavigationContainer,
   SafeAreaView,
   TabRouter,
+  addNavigationHelpers,
 } from 'react-navigation';
 import SampleText from './SampleText';
-import { Button } from './commonComponents/ButtonWithMargin';
 
 const MyNavScreen = ({ navigation, banner }) => (
   <ScrollView>
@@ -65,14 +66,19 @@ const CustomTabBar = ({ navigation }) => {
   );
 };
 
-const CustomTabView = ({ descriptors, navigation }) => {
+const CustomTabView = ({ router, navigation }) => {
   const { routes, index } = navigation.state;
-  const descriptor = descriptors[routes[index].key];
-  const ActiveScreen = descriptor.getComponent();
+  const ActiveScreen = router.getComponentForRouteName(routes[index].routeName);
   return (
     <SafeAreaView forceInset={{ top: 'always' }}>
       <CustomTabBar navigation={navigation} />
-      <ActiveScreen navigation={descriptor.navigation} />
+      <ActiveScreen
+        navigation={addNavigationHelpers({
+          dispatch: navigation.dispatch,
+          state: routes[index],
+        })}
+        screenProps={{}}
+      />
     </SafeAreaView>
   );
 };
@@ -99,7 +105,7 @@ const CustomTabRouter = TabRouter(
 );
 
 const CustomTabs = createNavigationContainer(
-  createNavigator(CustomTabView, CustomTabRouter, {})
+  createNavigator(CustomTabRouter)(CustomTabView)
 );
 
 const styles = StyleSheet.create({

@@ -3,11 +3,14 @@
  */
 
 import React from 'react';
-import { SafeAreaView, StatusBar, Text, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { Button, SafeAreaView, Text } from 'react-native';
+import {
+  TabNavigator,
+  TabBarTop,
+  StackNavigator,
+  withNavigationFocus,
+} from 'react-navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Button } from './commonComponents/ButtonWithMargin';
 
 import SampleText from './SampleText';
 
@@ -67,10 +70,9 @@ const createTabScreen = (name, icon, focusedIcon, tintColor = '#673ab7') => {
             />
           )}
           <Button
-            onPress={() => this.props.navigation.pop()}
+            onPress={() => this.props.navigation.goBack(null)}
             title="Back to other examples"
           />
-          <StatusBar barStyle="default" />
         </SafeAreaView>
       );
     }
@@ -78,7 +80,7 @@ const createTabScreen = (name, icon, focusedIcon, tintColor = '#673ab7') => {
   return withNavigationFocus(TabScreen);
 };
 
-const TabsWithNavigationFocus = createMaterialBottomTabNavigator(
+const TabsWithNavigationFocus = TabNavigator(
   {
     One: {
       screen: createTabScreen('One', 'numeric-1-box-outline', 'numeric-1-box'),
@@ -95,9 +97,35 @@ const TabsWithNavigationFocus = createMaterialBottomTabNavigator(
     },
   },
   {
-    shifting: false,
-    activeTintColor: '#F44336',
+    tabBarComponent: TabBarTop,
+    tabBarPosition: 'top',
+    animationEnabled: true,
+    swipeEnabled: true,
   }
 );
 
-export default TabsWithNavigationFocus;
+const Stack = StackNavigator(
+  {
+    TabsWithNavigationFocus,
+  },
+  {
+    navigationOptions: {
+      headerTitle: 'Navigation focus example',
+      headerLeft: null,
+      headerTitleStyle: {
+        flex: 1,
+        textAlign: 'left',
+        left: 0,
+        right: 0,
+      },
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: '#2196f3',
+        borderBottomWidth: 0,
+        elevation: 0,
+      },
+    },
+  }
+);
+
+export default Stack;

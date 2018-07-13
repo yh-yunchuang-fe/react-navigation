@@ -3,16 +3,11 @@
  */
 
 import React from 'react';
-import { ScrollView, StatusBar } from 'react-native';
-import {
-  SafeAreaView,
-  createStackNavigator,
-  createBottomTabNavigator,
-} from 'react-navigation';
+import { Button, ScrollView, StatusBar } from 'react-native';
+import { SafeAreaView, StackNavigator, TabNavigator } from 'react-navigation';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SampleText from './SampleText';
-import { Button } from './commonComponents/ButtonWithMargin';
 
 const MyNavScreen = ({ navigation, banner }) => (
   <ScrollView>
@@ -56,7 +51,7 @@ const MySettingsScreen = ({ navigation }) => (
   <MyNavScreen banner="Settings Screen" navigation={navigation} />
 );
 
-const MainTab = createStackNavigator({
+const MainTab = StackNavigator({
   Home: {
     screen: MyHomeScreen,
     path: '/',
@@ -73,7 +68,7 @@ const MainTab = createStackNavigator({
   },
 });
 
-const SettingsTab = createStackNavigator({
+const SettingsTab = StackNavigator({
   Settings: {
     screen: MySettingsScreen,
     path: '/',
@@ -89,7 +84,7 @@ const SettingsTab = createStackNavigator({
   },
 });
 
-const StacksInTabs = createBottomTabNavigator(
+const StacksInTabs = TabNavigator(
   {
     MainTab: {
       screen: MainTab,
@@ -121,6 +116,9 @@ const StacksInTabs = createBottomTabNavigator(
     },
   },
   {
+    tabBarPosition: 'bottom',
+    animationEnabled: false,
+    swipeEnabled: false,
     tabBarOptions: {
       showLabel: false,
     },

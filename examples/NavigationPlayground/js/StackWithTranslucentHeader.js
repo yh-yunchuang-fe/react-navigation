@@ -12,18 +12,15 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import * as React from 'react';
 import { BlurView, Constants } from 'expo';
 import {
+  Button,
   Dimensions,
   Platform,
   ScrollView,
   StatusBar,
   View,
 } from 'react-native';
-import { Header, createStackNavigator } from 'react-navigation';
-import invariant from 'invariant';
-
+import { Header, StackNavigator } from 'react-navigation';
 import SampleText from './SampleText';
-import { Button } from './commonComponents/ButtonWithMargin';
-import { HeaderButtons } from './commonComponents/HeaderButtons';
 
 type MyNavScreenProps = {
   navigation: NavigationScreenProp<*>,
@@ -33,16 +30,11 @@ type MyNavScreenProps = {
 class MyNavScreen extends React.Component<MyNavScreenProps> {
   render() {
     const { navigation, banner } = this.props;
-    const { push, replace, popToTop, pop } = navigation;
-    invariant(
-      push && replace && popToTop && pop,
-      'missing action creators for StackNavigator'
-    );
     return (
       <ScrollView style={{ flex: 1 }} {...this.getHeaderInset()}>
         <SampleText>{banner}</SampleText>
         <Button
-          onPress={() => push('Profile', { name: 'Jane' })}
+          onPress={() => navigation.push('Profile', { name: 'Jane' })}
           title="Push a profile screen"
         />
         <Button
@@ -50,11 +42,11 @@ class MyNavScreen extends React.Component<MyNavScreenProps> {
           title="Navigate to a photos screen"
         />
         <Button
-          onPress={() => replace('Profile', { name: 'Lucy' })}
+          onPress={() => navigation.replace('Profile', { name: 'Lucy' })}
           title="Replace with profile"
         />
-        <Button onPress={() => popToTop()} title="Pop to top" />
-        <Button onPress={() => pop()} title="Pop" />
+        <Button onPress={() => navigation.popToTop()} title="Pop to top" />
+        <Button onPress={() => navigation.pop()} title="Pop" />
         <Button onPress={() => navigation.goBack(null)} title="Go back" />
         <StatusBar barStyle="default" />
       </ScrollView>
@@ -201,19 +193,17 @@ MyProfileScreen.navigationOptions = props => {
     // Render a button on the right side of the header.
     // When pressed switches the screen to edit mode.
     headerRight: (
-      <HeaderButtons>
-        <HeaderButtons.Item
-          title={params.mode === 'edit' ? 'Done' : 'Edit'}
-          onPress={() =>
-            setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
-          }
-        />
-      </HeaderButtons>
+      <Button
+        title={params.mode === 'edit' ? 'Done' : 'Edit'}
+        onPress={() =>
+          setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
+        }
+      />
     ),
   };
 };
 
-const StackWithTranslucentHeader = createStackNavigator(
+const StackWithTranslucentHeader = StackNavigator(
   {
     Home: {
       screen: MyHomeScreen,

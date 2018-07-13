@@ -3,10 +3,9 @@
  */
 
 import React from 'react';
-import { ScrollView, StatusBar, Text } from 'react-native';
-import { SafeAreaView, createStackNavigator } from 'react-navigation';
+import { Button, ScrollView, StatusBar, Text } from 'react-native';
+import { SafeAreaView, StackNavigator } from 'react-navigation';
 import SampleText from './SampleText';
-import { Button } from './commonComponents/ButtonWithMargin';
 
 const MyNavScreen = ({ navigation, banner }) => (
   <ScrollView>
@@ -32,8 +31,7 @@ const MyNavScreen = ({ navigation, banner }) => (
               headerVisible:
                 !navigation.state.params ||
                 !navigation.state.params.headerVisible,
-            })
-          }
+            })}
         />
       )}
       <Button onPress={() => navigation.goBack(null)} title="Go back" />
@@ -59,7 +57,7 @@ MyProfileScreen.navigationOptions = ({ navigation }) => ({
   title: `${navigation.state.params.name}'s Profile!`,
 });
 
-const ProfileNavigator = createStackNavigator(
+const ProfileNavigator = StackNavigator(
   {
     Home: {
       screen: MyHomeScreen,
@@ -89,7 +87,7 @@ MyHeaderTestScreen.navigationOptions = ({ navigation }) => {
   };
 };
 
-const ModalStack = createStackNavigator(
+const ModalStack = StackNavigator(
   {
     ProfileNavigator: {
       screen: ProfileNavigator,

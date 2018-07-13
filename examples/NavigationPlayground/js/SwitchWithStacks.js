@@ -6,12 +6,12 @@ import React from 'react';
 import {
   ActivityIndicator,
   AsyncStorage,
+  Button,
   StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
-import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import { Button } from './commonComponents/ButtonWithMargin';
+import { StackNavigator, SwitchNavigator } from 'react-navigation';
 
 class SignInScreen extends React.Component<any, any> {
   static navigationOptions = {
@@ -33,7 +33,7 @@ class SignInScreen extends React.Component<any, any> {
 
   _signInAsync = async () => {
     await AsyncStorage.setItem('userToken', 'abc');
-    this.props.navigation.navigate('Home');
+    this.props.navigation.navigate('App');
   };
 }
 
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppStack = createStackNavigator({ Home: HomeScreen, Other: OtherScreen });
-const AuthStack = createStackNavigator({ SignIn: SignInScreen });
+const AppStack = StackNavigator({ Home: HomeScreen, Other: OtherScreen });
+const AuthStack = StackNavigator({ SignIn: SignInScreen });
 
-export default createSwitchNavigator({
+export default SwitchNavigator({
   Loading: LoadingScreen,
   App: AppStack,
   Auth: AuthStack,

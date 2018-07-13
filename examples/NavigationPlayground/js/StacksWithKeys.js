@@ -1,7 +1,6 @@
 import React from 'react';
-import { StatusBar, Text, View } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
-import { Button } from './commonComponents/ButtonWithMargin';
+import { Button, StatusBar, Text, View } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
 class HomeScreen extends React.Component<any, any> {
   render() {
@@ -82,7 +81,7 @@ class SettingsScreen extends React.Component<any, any> {
   }
 }
 
-const Stack = createStackNavigator(
+const Stack = StackNavigator(
   {
     Home: {
       screen: HomeScreen,

@@ -16,7 +16,7 @@ import {
   StatusBar,
   View,
 } from 'react-native';
-import { SafeAreaView, createStackNavigator } from 'react-navigation';
+import { SafeAreaView, StackNavigator } from 'react-navigation';
 
 import CustomTabs from './CustomTabs';
 import CustomTransitioner from './CustomTransitioner';
@@ -25,19 +25,16 @@ import MultipleDrawer from './MultipleDrawer';
 import TabsInDrawer from './TabsInDrawer';
 import ModalStack from './ModalStack';
 import StacksInTabs from './StacksInTabs';
+import SwitchWithStacks from './SwitchWithStacks';
 import StacksOverTabs from './StacksOverTabs';
-import StacksOverTopTabs from './StacksOverTopTabs';
 import StacksWithKeys from './StacksWithKeys';
-import InactiveStack from './InactiveStack';
-import StackWithCustomHeaderBackImage from './StackWithCustomHeaderBackImage';
 import SimpleStack from './SimpleStack';
 import StackWithHeaderPreset from './StackWithHeaderPreset';
 import StackWithTranslucentHeader from './StackWithTranslucentHeader';
 import SimpleTabs from './SimpleTabs';
-import SwitchWithStacks from './SwitchWithStacks';
+import CustomTabNavigator from './CustomTabNavigator';
+import TabAnimations from './TabAnimations';
 import TabsWithNavigationFocus from './TabsWithNavigationFocus';
-import TabsWithNavigationEvents from './TabsWithNavigationEvents';
-import KeyboardHandlingExample from './KeyboardHandlingExample';
 
 const ExampleInfo = {
   SimpleStack: {
@@ -45,17 +42,8 @@ const ExampleInfo = {
     description: 'A card stack',
   },
   SwitchWithStacks: {
-    name: 'Switch between routes',
-    description: 'Jump between routes',
-  },
-  InactiveStack: {
-    name: 'Navigate idempotently to stacks in inactive routes',
-    description:
-      'An inactive route in a stack should be given the opportunity to handle actions',
-  },
-  StackWithCustomHeaderBackImage: {
-    name: 'Custom header back image',
-    description: 'Stack with custom header back image',
+    name: 'Switch Example',
+    description: 'A switch with stacks inside',
   },
   SimpleTabs: {
     name: 'Tabs Example',
@@ -64,6 +52,10 @@ const ExampleInfo = {
   Drawer: {
     name: 'Drawer Example',
     description: 'Android-style drawer navigation',
+  },
+  StackWithHeaderPreset: {
+    name: 'UIKit-style Header Transitions',
+    description: 'Masked back button and sliding header items. iOS only.',
   },
   StackWithHeaderPreset: {
     name: 'UIKit-style Header Transitions',
@@ -81,9 +73,13 @@ const ExampleInfo = {
     name: 'Drawer + Tabs Example',
     description: 'A drawer combined with tabs',
   },
+  CustomTabNavigator: {
+    name: 'Custom Tab Navigator Example',
+    description: 'Extending the tab navigator',
+  },
   CustomTabs: {
-    name: 'Custom Tabs',
-    description: 'Custom tabs with tab router',
+    name: 'Custom Tabs View',
+    description: 'Custom tabs using TabRouter',
   },
   CustomTransitioner: {
     name: 'Custom Transitioner',
@@ -107,10 +103,6 @@ const ExampleInfo = {
     name: 'Stacks over Tabs',
     description: 'Nested stack navigation that pushes on top of tabs',
   },
-  StacksOverTopTabs: {
-    name: 'Stacks with non-standard header height',
-    description: 'Tab navigator in stack with custom header heights',
-  },
   StacksWithKeys: {
     name: 'Link in Stack with keys',
     description: 'Use keys to link between screens',
@@ -123,46 +115,34 @@ const ExampleInfo = {
     name: 'Link to Settings Tab',
     description: 'Deep linking into a route in tab',
   },
+  TabAnimations: {
+    name: 'Animated Tabs Example',
+    description: 'Tab transitions have custom animations',
+  },
   TabsWithNavigationFocus: {
     name: 'withNavigationFocus',
     description: 'Receive the focus prop to know when a screen is focused',
-  },
-  TabsWithNavigationEvents: {
-    name: 'NavigationEvents',
-    description:
-      'Declarative NavigationEvents component to subscribe to navigation events',
-  },
-  KeyboardHandlingExample: {
-    name: 'Keyboard Handling Example',
-    description:
-      'Demo automatic handling of keyboard showing/hiding inside StackNavigator',
   },
 };
 
 const ExampleRoutes = {
   SimpleStack,
   SwitchWithStacks,
-  SimpleTabs: SimpleTabs,
-  Drawer: Drawer,
+  SimpleTabs,
+  Drawer,
   // MultipleDrawer: {
   //   screen: MultipleDrawer,
   // },
-  StackWithCustomHeaderBackImage: StackWithCustomHeaderBackImage,
-  ...Platform.select({
-    ios: {
-      StackWithHeaderPreset: StackWithHeaderPreset,
-    },
-    android: {},
-  }),
-  StackWithTranslucentHeader: StackWithTranslucentHeader,
-  TabsInDrawer: TabsInDrawer,
-  CustomTabs: CustomTabs,
-  CustomTransitioner: CustomTransitioner,
-  ModalStack: ModalStack,
-  StacksWithKeys: StacksWithKeys,
-  StacksInTabs: StacksInTabs,
-  StacksOverTabs: StacksOverTabs,
-  StacksOverTopTabs: StacksOverTopTabs,
+  StackWithHeaderPreset,
+  StackWithTranslucentHeader,
+  TabsInDrawer,
+  CustomTabs,
+  CustomTransitioner,
+  ModalStack,
+  StacksWithKeys,
+  StacksInTabs,
+  StacksOverTabs,
+  CustomTabNavigator,
   LinkStack: {
     screen: SimpleStack,
     path: 'people/Jordan',
@@ -171,11 +151,8 @@ const ExampleRoutes = {
     screen: SimpleTabs,
     path: 'settings',
   },
+  TabAnimations,
   TabsWithNavigationFocus,
-  TabsWithNavigationEvents,
-  KeyboardHandlingExample,
-  // This is commented out because it's rarely useful
-  // InactiveStack,
 };
 
 type State = {
@@ -186,7 +163,7 @@ class MainScreen extends React.Component<any, State> {
     scrollY: new Animated.Value(0),
   };
 
-  componentDidMount() {
+  componentWillMount() {
     Asset.fromModule(
       require('react-navigation/src/views/assets/back-icon-mask.png')
     ).downloadAsync();
@@ -321,7 +298,7 @@ class MainScreen extends React.Component<any, State> {
   }
 }
 
-const AppNavigator = createStackNavigator(
+const AppNavigator = StackNavigator(
   {
     ...ExampleRoutes,
     Index: {
@@ -340,7 +317,7 @@ const AppNavigator = createStackNavigator(
   }
 );
 
-export default AppNavigator;
+export default () => <AppNavigator />;
 
 const styles = StyleSheet.create({
   item: {
